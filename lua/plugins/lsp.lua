@@ -33,11 +33,42 @@ return {
                 ['bashls'] = function()
                     lspconfig.bashls.setup({
                         filetypes = { "sh", "zsh", "bash" },
-                        capabilities = capabilities })
+                        capabilities = capabilities
+                    })
+                end,
+                ['clangd'] = function()
+                    lspconfig.clangd.setup({
+                        cmd = {
+                            'clangd',
+                            "--background-index",
+                            "--clang-tidy",
+                        },
+                        on_attach = function()
+                            vim.keymap.set(
+                                'n',
+                                '<leader>`',
+                                '<cmd>ClangdSwitchSourceHeader<cr>',
+                                { buffer = true, silent = true, remap = false }
+                            )
+                        end,
+                        flags = {
+                            debounce_text_changes = 150,
+                        },
+                        init_options = {
+                            compilationDatabasePath = "~/.local/include",
+                            fallbackFlags = {
+                                "-std=c++20",
+                                "-I~/.local/include",
+                                "-L~/.local/lib",
+                                "-lfmt",
+                            },
+                        },
+                        capabilities = capabilities
+                    })
                 end,
                 -- Lua
                 ['lua_ls'] = function()
-                    lspconfig.lua_ls.setup ({
+                    lspconfig.lua_ls.setup({
                         capabilities = capabilities,
                         settings = {
                             Lua = {
@@ -86,14 +117,14 @@ return {
                 callback = function(ev)
                     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
                     local opts = { buffer = ev.buf }
-                    vim.keymap.set('n',          'gD',        vim.lsp.buf.declaration,     opts)
-                    vim.keymap.set('n',          'gd',        vim.lsp.buf.definition,      opts)
-                    vim.keymap.set('n',          '<space>D',  vim.lsp.buf.type_definition, opts)
-                    vim.keymap.set('n',          'K',         vim.lsp.buf.hover,           opts)
-                    vim.keymap.set({'i', 'n'},   '<C-k>',     vim.lsp.buf.signature_help,  opts)
-                    vim.keymap.set('n',          'gi',        vim.lsp.buf.implementation,  opts)
-                    vim.keymap.set('n',          '<F2>',      vim.lsp.buf.rename,          opts)
-                    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action,     opts)
+                    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+                    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+                    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+                    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+                    vim.keymap.set({ 'i', 'n' }, '<C-k>', vim.lsp.buf.signature_help, opts)
+                    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+                    vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, opts)
+                    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
                     vim.keymap.set('n', 'g=',
                         function() vim.lsp.buf.format { async = true } end, opts)
                 end,

@@ -2,6 +2,7 @@
 -- Simpified Map function =================================
 -- ========================================================
 local map = function(modes, from, to, opts)
+    opts = opts or { remap = false }
     vim.keymap.set(modes, from, to, opts)
 end
 
@@ -16,19 +17,23 @@ map('i', '<C-z>', '<C-o>zz')
 -- ========================================================
 -- Command Mode ===========================================
 -- ========================================================
-map('c', '<C-A>', '<Home>', { noremap = true })
+map('c', '<C-A>', '<Home>',  { noremap = true })
 map('c', '<C-F>', '<Right>', { noremap = true })
-map('c', '<C-B>', '<Left>', { noremap = true })
+map('c', '<C-B>', '<Left>',  { noremap = true })
 
 -- ========================================================
 -- Vim Builtin Functions ==================================
 -- ========================================================
 map('n', '<C-p>', '<cmd>Oil<cr>', { noremap = true })
-map('n', '<F1>', '<ESC>:vert h ')
+map('n', '<F1>',  '<ESC>:vert h ')
 map('n', '<C-h>', '<cmd>tabp<cr>')
 map('n', '<C-l>', '<cmd>tabn<cr>')
 
 -- ========================================================
--- Custom Modules =========================================
+-- Quality of life ========================================
 -- ========================================================
 map('n', '<Backspace>', '<cmd>lua require("modules.backspace_oil")()<cr>')
+map('n', '<C-_>',       '<cmd>normal gcc<cr>')
+map('x', '<C-_>',       '<cmd>normal gc<cr>')
+map('n', '<leader>;;',  '<cmd>messages<cr>')
+map('n', '<leader>;c',  '<cmd>messages clear<cr>')
