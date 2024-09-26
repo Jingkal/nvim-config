@@ -9,7 +9,6 @@ function M.run()
     end
 
     vim.cmd([[luafile ]] .. path)
-    print(path .. " sourced")
 end
 
 function M.build()

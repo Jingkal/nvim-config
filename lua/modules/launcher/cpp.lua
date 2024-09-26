@@ -1,51 +1,55 @@
-vim.g.CPP_DEFAULT_OUTPUT_DIR = '/tmp/cppout/'
-vim.g.CPP_COMPILE_COMMAND_TEMPLATE = 'g++ --std=c++20 -I$HOME/.local/include %s -L$HOME/.local/lib -lfmt -o %s'
+-- Global
+vim.g.cpp_root_marker = { 'build' }
+vim.g.cpp_build_dir   = '/tmp/cppout/'
 
-local M = {}
+-- Buffer
+vim.b.cpp_build_cmd   = 'g++ -std=c++20 -I$HOME/.local/include %s -o %s -L$HOME/.local/lib -lfmt'
+vim.b.cpp_root_dir    = nil
+vim.b.cpp_out_file    = nil
 
-function M.init_singlefile()
-    local filename = vim.fn.expand('%:p')
-    vim.b.CPP_COMPILE_OUTFILE = string.format('%s%s.out',
-        vim.g.CPP_DEFAULT_OUTPUT_DIR,
-        filename:gsub('.*/', ''):gsub('%..+$', '')
-    )
-    vim.b.CPP_COMPILE_COMMAND = string.format(
-        vim.g.CPP_COMPILE_COMMAND_TEMPLATE,
-        filename,
-        vim.b.CPP_COMPILE_OUTFILE
-    )
-    if not vim.fn.isdirectory(vim.g.CPP_DEFAULT_OUTPUT_DIR) then
-        vim.fn.mkdir(vim.g.CPP_DEFAULT_OUTPUT_DIR, 'p')
-    end
-    if not vim.fn.isdirectory(vim.g.CPP_DEFAULT_OUTPUT_DIR) then
-        vim.api.nvim_err_writeln(
-            'Failed to create CPP output directory. ' ..
-            vim.g.CPP_DEFAULT_OUTPUT_DIR
-        )
-        return false
-    end
-    return true
-end
+local M               = {}
 
 function M.build()
-    if not M.init_singlefile() then
-        return
+    if not vim.b.cpp_root_dir then
+        vim.b.cpp_root_dir = vim.fs.root(0, vim.g.cpp_root_marker)
     end
-    local output = vim.fn.system(vim.b.CPP_COMPILE_COMMAND)
-    if vim.v.shell_error ~= 0 then
-        print(output)
+
+    local cmd = nil
+    if vim.b.cpp_root_dir then
+        -- project
+        local file_basename = vim.fn.expand('%:p'):gsub(vim.b.cpp_root_dir, ''):gsub('%.%w+$', '')
+        vim.b.cpp_out_file = vim.fs.joinpath(vim.b.cpp_root_dir, 'build', file_basename)
+        cmd = string.format('cd %s && cmake --build build', vim.b.cpp_root_dir)
     else
-        print(string.format('[%s] Build success!', vim.b.CPP_COMPILE_OUTFILE))
+        -- single file
+        local file_basename = vim.fn.expand('%:t'):gsub('%.%w+$', '')
+        vim.b.cpp_out_file = vim.fs.joinpath(vim.g.cpp_build_dir, file_basename)
+        cmd = vim.b.cpp_build_cmd:format(vim.fn.expand('%:p'), vim.b.cpp_out_file)
     end
+
+    require('modules.terminal').run(string.format('clear && \n %s', cmd))
 end
 
 function M.run()
-    if vim.loop.fs_stat(vim.b.CPP_COMPILE_OUTFILE) == nil then
-        vim.api.nvim_err_writeln('Build file first.')
-        return
-    end
-    local cmd = string.format('terminal %s', vim.b.CPP_COMPILE_OUTFILE)
-    vim.cmd(cmd)
+    require('modules.terminal').run(string.format('clear && \n %s', vim.b.cpp_out_file))
 end
+
+vim.api.nvim_create_user_command('SetLaunchRootDir', function()
+    vim.b.cpp_root_dir = vim.fn.input({
+        prompt = 'CPP root dir: ',
+        default = vim.b.cpp_root_dir,
+        cancelreturn = '',
+    })
+    print('\n')
+end, {})
+
+vim.api.nvim_create_user_command('SetLaunchOutFile', function()
+    vim.b.cpp_out_file = vim.fn.input({
+        prompt = 'CPP out file: ',
+        default = vim.b.cpp_out_file,
+        cancelreturn = '',
+    })
+    print('\n')
+end, {})
 
 return M

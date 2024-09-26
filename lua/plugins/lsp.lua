@@ -38,11 +38,11 @@ return {
                 end,
                 ['clangd'] = function()
                     lspconfig.clangd.setup({
-                        cmd = {
-                            'clangd',
-                            "--background-index",
-                            "--clang-tidy",
-                        },
+                        -- cmd = {
+                        --     'clangd',
+                        --     "--background-index",
+                        --     "--clang-tidy",
+                        -- },
                         on_attach = function()
                             vim.keymap.set(
                                 'n',
@@ -53,15 +53,6 @@ return {
                         end,
                         flags = {
                             debounce_text_changes = 150,
-                        },
-                        init_options = {
-                            compilationDatabasePath = "~/.local/include",
-                            fallbackFlags = {
-                                "-std=c++20",
-                                "-I~/.local/include",
-                                "-L~/.local/lib",
-                                "-lfmt",
-                            },
                         },
                         capabilities = capabilities
                     })
