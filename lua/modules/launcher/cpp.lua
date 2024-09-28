@@ -3,7 +3,7 @@ vim.g.cpp_root_marker = { 'build' }
 vim.g.cpp_build_dir   = '/tmp/cppout/'
 
 -- Buffer
-vim.b.cpp_build_cmd   = 'g++ -std=c++20 -I$HOME/.local/include %s -o %s -L$HOME/.local/lib -lfmt'
+vim.b.cpp_build_cmd   = 'g++ -std=c++20 -g -I$HOME/.local/include %s -o %s -L$HOME/.local/lib -lfmt'
 vim.b.cpp_root_dir    = nil
 vim.b.cpp_out_file    = nil
 
