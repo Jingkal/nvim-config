@@ -17,35 +17,8 @@ return {
 
     -- ////////////////////////////
     {
-        'keaising/im-select.nvim',
-        enabled = function()
-            local m = string.match(vim.fn.system('uname'), 'Darwin')
-            if m == nil then
-                return false
-            end
-            return true
-        end,
-        opts = {
-            default_im_select       = "com.apple.keylayout.ABC",
-            default_command         = 'im-select',
-            set_default_events      = {
-                "VimEnter", "FocusGained", "InsertLeave", "CmdlineLeave"
-            },
-            set_previous_events     = { "InsertEnter" },
-            keep_quiet_on_no_binary = false,
-            async_switch_im         = true
-        },
-        config = function(opts)
-            require('im_select').setup(opts)
-        end
-    },
-
-    -- ////////////////////////////
-    {
         'numToStr/Comment.nvim',
-
         keys = { '<leader>/', '<leader>\\' },
-
         config = function()
             require('Comment').setup({
                 toggler = {
@@ -67,9 +40,7 @@ return {
     -- ////////////////////////////
     {
         'stevearc/oil.nvim',
-
         dependencies = { "nvim-tree/nvim-web-devicons" },
-
         opts = {
             view_options = {
                 show_hidden = true,
@@ -86,12 +57,9 @@ return {
     -- ////////////////////////////
     {
         'lukas-reineke/indent-blankline.nvim',
-
         main = 'ibl',
-
         config = function()
             require("ibl").setup()
         end,
     },
-
 }

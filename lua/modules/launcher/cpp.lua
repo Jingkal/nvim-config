@@ -19,7 +19,7 @@ function M.build()
         -- project
         local file_basename = vim.fn.expand('%:p'):gsub(vim.b.cpp_root_dir, ''):gsub('%.%w+$', '')
         vim.b.cpp_out_file = vim.fs.joinpath(vim.b.cpp_root_dir, 'build', file_basename)
-        cmd = string.format('cd %s && cmake --build build', vim.b.cpp_root_dir)
+        cmd = string.format('cd %s && cmake --build build -j4', vim.b.cpp_root_dir)
     else
         -- single file
         local file_basename = vim.fn.expand('%:t'):gsub('%.%w+$', '')
