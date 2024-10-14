@@ -6,7 +6,7 @@ return {
         priority = 1000,
         opts = {},
         config = function(opts)
-            vim.cmd.colorscheme("tokyonight-storm")
+            vim.cmd.colorscheme("tokyonight-night")
         end,
     },
 }
