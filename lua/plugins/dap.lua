@@ -16,6 +16,7 @@ return {
         vim.keymap.set('n', '<F11>', require('dap').step_out, { remap = false })
         vim.keymap.set('n', '<F12>', require('dap').step_back, { remap = false })
         vim.keymap.set('n', '<leader>b', require('dap').toggle_breakpoint, { remap = false })
+        vim.keymap.set('n', '<leader>kj', require('dapui').toggle, { remap = false })
 
         local dapui = require 'dapui'
         dapui.setup()

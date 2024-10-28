@@ -109,7 +109,7 @@ return {
                     vim.keymap.set('n', 'K',        vim.lsp.buf.hover, opts)
                     vim.keymap.set('n', 'gi',       vim.lsp.buf.implementation, opts)
                     vim.keymap.set('n', '<F2>',     vim.lsp.buf.rename, opts)
-                    vim.keymap.set('n', 'g=',       function() vim.lsp.buf.format { async = true } end, opts)
+                    -- vim.keymap.set('n', 'g=',       function() vim.lsp.buf.format { async = true } end, opts)
                     vim.keymap.set({ 'i', 'n' }, '<C-k>',     vim.lsp.buf.signature_help, opts)
                     vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
                 end,
