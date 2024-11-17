@@ -1,6 +1,6 @@
 vim.api.nvim_set_keymap("v", "<leader>ie", '<cmd>lua require("codecompanion").prompt("explain")<cr>', { noremap = true, silent = true, })
 vim.api.nvim_set_keymap("n", "<leader>ic", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true, })
-vim.api.nvim_set_keymap("n", "<leader>ii", "<cmd>CodeCompanion ", { noremap = true, silent = true, })
+vim.keymap.set({"n", 'v'}, "<leader>ii", ":CodeCompanion ", { noremap = true, silent = true, })
 
 
 return {
@@ -23,6 +23,17 @@ return {
             strategies = {
                 chat = {
                     adapter = "ollama",
+                    keymaps = {
+                        close = {
+                            modes = {
+                                n = "<C-q>",
+                                i = '<C-q>',
+                            },
+                            index = 3,
+                            callback = "keymaps.close",
+                            description = "Close Chat",
+                        },
+                    }
                 },
                 inline = {
                     adapter = "ollama",
